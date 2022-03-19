@@ -12,14 +12,6 @@ app.get('/', (req, res) => {
     res.render('main.html')
 })
 
-// app.get('/user/join', (req, res) => {
-//     res.render('join.html')
-// })
-
-// app.get('/user/login', (req, res) => {
-//     res.render('login.html')
-// })
-
 app.use(router)
 
 app.listen(3001, ()=> {
