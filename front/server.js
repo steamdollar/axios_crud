@@ -15,7 +15,7 @@ app.get('/user/join', (req, res) => {
 })
 
 app.get('/user/login', (req, res) => {
-    res.render('/user/login')
+    res.render('login.html')
 })
 
 app.listen(3001, ()=> {

@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const pool = require('./db.js').pool
+const { createToken } = require('./utils/jwt.js')
 
 const app = express()
 
@@ -34,15 +35,45 @@ app.post('/api/user/join',  async (req, res) => {
     }
 })
 
+app.post('/api/user/login', async (req, res) => {
+    const { userid, userpw } = req.body
+    const sql = `SELECT userid, name, nickname from user where userid =? and userpw = ?`
+    const param = [userid, userpw]
+
+    try {
+        const [result] = await pool.execute(sql, param)
+        
+        if (result.length == 0 ) { throw new Error('id/pw 불일치') }
+
+        const jwt = createToken(result[0])
+        
+        res.cookie('token', jwt, {
+            path:'/',
+            httpOnly : true,
+            domain: 'localhost'
+        })
+        
+        const response = {
+            result,
+            errno:0
+        }
+
+        res.json(response)
+    }
+
+    catch (e) {
+        console.log(e.message)
+        const response = {
+            errno : 1
+        }
+        res.json(response)
+    }
+
+})
+
+//
+
 app.listen(4001, ()=> {
     console.log('server run 4001')
 })
 
-// // ResultSetHeader {
-//   fieldCount: 0,
-//   affectedRows: 1,
-//   insertId: 0,
-//   info: '',
-//   serverStatus: 2,
-//   warningStatus: 0
-// }

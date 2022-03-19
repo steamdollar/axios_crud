@@ -5,8 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=], initial-scale=1.0">
     <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    
+    <form method="post" action="http://localhost:4001/api/user/login" id="login_frm">
+        <ul>
+            <li>
+                <input type="text" name="userid" id="userid" value="sila">
+            </li>
+            <li>
+                <input type="text" name="userpw" id="userpw" value="1234">
+            </li>
+        </ul>
+        <input type="submit" value="login">
+    </form>
+    <script type="text/javascript">
+        const login_frm = document.querySelector('#login_frm')
+
+        login_frm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const userid = document.querySelector('#userid')
+            const userpw = document.querySelector('#userpw')
+
+            const data = {
+                userid: userid.value,
+                userpw: userpw.value
+            }
+
+            const option = {
+                'Content=type' : 'application/json',
+                withCredentials: true
+            }
+
+            try {
+                const response = await axios.post('http://localhost:4001/api/user/login', data, option)
+                
+                if( response.data.errno !== 0) { throw new Error('id/pw를 확인해주세요') }
+
+                alert(`${response.data.result[0].nickname}님 환영합니다.`)
+
+                location.href='http://localhost:3001'
+            }
+            catch (e) {
+                console.log(e.message)
+                alert(e.message)
+            }
+        })
+    </script>
 </body>
 </html>
