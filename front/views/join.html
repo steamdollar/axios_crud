@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <form method="POST" id="join_frm" action="/">
+        <ul class="join_frm">
+            <li>
+                <span class="join_label">아이디</span>
+                <span class="join_input">
+                    <input type="text" name="userid" id="userid" value="sila">
+                </span>
+            </li>
+            <li>
+                <span class="join_label">패스워드</span>
+                <span class="join_input">
+                    <input type="text" name="userpw" id="userpw" value="1234">
+                </span>
+            </li>
+            <li>
+                <span class="join_label">이름</span>
+                <span class="join_input">
+                    <input type="text" name="name" id="name" value="qwerty">
+                </span>
+            </li>
+            <li>
+                <span class="join_label">별명</span>
+                <span class="join_input">
+                    <input type="text" name="nickname" id="nickname" value="qwerty">
+                </span>
+            </li>
+            <li>
+                <span class="join_label">생년월일 (YYYYMMDD 형태로 입력)</span>
+                <span class="join_input">
+                    <input type="text" name="birth" id="birth" value="19940916">
+                </span>
+            </li>
+            <li>
+                <span class="join_label">성별</span>
+                <span class="join_input">
+                    <input type="radio" name="gender" value="남자" id="gender1" checked> <label for="gender1">남자</label>
+                    <input type="radio" name="gender" value="여자" id="gender2" > <label for="gender2">여자</label>
+                </span>
+            </li>
+            <li>
+                <span class="join_label">전화번호</span>
+                <span class="join_input">
+                    <input type="text" name="phone" id="phone" value="00000000">
+                </span>
+            </li>
+            <li>
+                <span class="join_label">핸드폰</span>
+                <span class="join_input">
+                    <input type="text" name="mobile" id="mobile" value="00000000">
+                </span>
+            </li>
+        </ul>
+        <input type="submit" id="btn" value="회원가입">
+    </form>
+
+    <script type="text/javascript">
+        const frm = document.querySelector('#join_frm')
+        frm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const btn = document.querySelector('#btn')
+            btn.value='회원 가입 진행 중'
+            btn.disabled = true
+
+            const data = {
+                userid:document.querySelector('#userid').value,
+                userpw:document.querySelector('#userpw').value,
+                name:document.querySelector('#name').value,
+                nickname:document.querySelector('#nickname').value,
+                birth:document.querySelector('#birth').value,
+                gender:document.querySelector('input[name="gender"]:checked').value,
+                phone:document.querySelector('#phone').value,
+                mobile:document.querySelector('#mobile').value
+            }
+
+            const option = {
+                'Content=type':'application/json',
+                withCredentials:true
+            }
+
+            const response = await axios.post('http://localhost:4001/api/user/join', data, option)
+            console.log(response)
+            if (response.data.errno === 0 ) {
+                alert('회원가입에 성공했습니다.')
+                location.href='/'
+            }
+            else {
+                alert('아이디가 중복되었습니다!')
+                btn.value='회원가입'
+                btn.disabled = false
+            }
+
+        })
+    </script>
+</body>
+</html>
