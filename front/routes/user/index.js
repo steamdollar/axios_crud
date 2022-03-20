@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const boardController = require('./boardController.js')
+const userController = require('./userController.js')
 
-router.get('/login', boardController.login)
-router.get('/join', boardController.join)
+router.get('/login', userController.login)
+router.get('/join', userController.join)
 
 module.exports = router
