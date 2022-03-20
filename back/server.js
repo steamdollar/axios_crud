@@ -1,12 +1,15 @@
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const pool = require('./db.js').pool
 const { createToken } = require('./utils/jwt.js')
+const { Auth } = require('./utils/auth.js')
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use(cookieParser())
 
 app.use(cors({
     origin:true,
@@ -72,6 +75,15 @@ app.post('/api/user/login', async (req, res) => {
 })
 
 //
+
+app.post('/api/auth', Auth, (req, res) => {
+    if (req.user === undefined) {
+        res.send('false')
+    }
+    else {
+        res.send('true')
+    }
+})
 
 app.listen(4001, ()=> {
     console.log('server run 4001')
